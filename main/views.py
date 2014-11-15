@@ -42,7 +42,7 @@ def improve(request):
     show_already = False
     try:
         if request.method == 'POST':
-            print request.POST
+            #print request.POST
             app_id = "e91111f8"
             app_key = "f9d16213fe4a2371bb8c919c89dc409a"
             recipe_id = request.POST['yummly-id']
@@ -63,7 +63,7 @@ def improve(request):
             specific_res = requests.get(recipe_id_url)
             if specific_res:
                 specific_res = specific_res.json()
-                print specific_res
+                #print specific_res
 
                 terms = [specific_res['name']]
 
@@ -71,7 +71,7 @@ def improve(request):
 
                 for term in terms:
                     res = requests.get("%s&allowedCourse[]=&q=%s" % (recipe_url, term))
-                    # print res.json()
+
                     if res.json() and res.json()['matches']:
                         a = res.json()['matches'][0]
 
@@ -82,31 +82,42 @@ def improve(request):
                         recipe_image_url = a["smallImageUrls"][0] + "0"
                         ingredients = a["ingredients"]
                         ingredients = json.dumps(ingredients)
-                        is_vegetarian = (request.POST.get('meal_is_vegetarian', False) == 'on')
-                        print is_vegetarian
+                        if request.POST.get('meal_is_vegetarian', False):
+                            is_vegetarian = True
+                        else:
+                            is_vegetarian = False
+                        if request.POST.get('meal_is_lac_intolerant', False):
+                            is_lac_intolerant = True
+                        else:
+                            is_lac_intolerant = False
+                        if request.POST.get('meal_is_breakfast', False):
+                            is_breakfast = True
+                        else:
+                            is_breakfast = false
                         price = int(request.POST.get('price', 8) or 8)
-                        # for meat in ['turkey', 'beef', 'meat', 'steak', 'chicken', 'pork', 'bacon', 'ham', 'duck', 'goose']:
-                        #     if any(meat in s for s in ingredients):
-                        #         is_vegetarian = False
 
                         prep_time_seconds = a["totalTimeInSeconds"]
                         instructions = ["If you're cooking chicken for this, trim visible fat from 4 chicken breasts, then cut the chicken lengthwise into thirds.  Put the can of chicken stock, 2 cans of water, and the Italian Herb Blend into a small sauce pan and bring to a boil.  When it boils add chicken breasts, turn heat to medium low, and  let simmer 15-20 minutes, or until the chicken is cooked through.  Drain the chicken into a colander placed in the sink and let it cool.  (I saved the liquid in the freezer to add when I'm making chicken stock.)'In a large skillet, melt butter over medium; reserve 1 tablespoon in a small bowl. To skillet, add apples, 1/2 cup sugar, and cinnamon. Increase heat to medium-high; cook, tossing occasionally, until apples are tender and liquid has evaporated, about 15 minutes. Spread filling on a second rimmed baking sheet; let cool completely.",
                                         "While the chicken cools, slice the basil leaves (and wash if needed), chop green onions, and measure the freshly-grated Parmesan. When it's cool, dice chicken into pieces about 3/4 inch square and place into medium-sized bowl.",
                                         "Combine mayo and buttermilk, whisking until it's smooth.  Then stir in green onion, Parmesan, and basil. Add dressing to the chicken in the bowl and gently mix until chicken is well coated with dressing. Season with salt and fresh ground black pepper. This can be served immediately or chilled slightly before serving.  This will keep in the fridge for about a day, but it's best freshly made."]
-                        if not (prep_time_seconds and ingredients and recipe_id and recipe_name and recipe_image_url and prep_time_seconds):
+                        if not (ingredients and recipe_id and recipe_name and recipe_image_url):
                             print "Not enough information, try a different recipe\n"
                         else:
                             if not Recipe.objects.filter(name=recipe_name):
-                                recipe = Recipe(name=recipe_name,
-                                                image_url=recipe_image_url,
-                                                ingredients_json=ingredients,
-                                                recipe_json=json.dumps(a),
-                                                detailed_json=json.dumps(specific_res),
-                                                prep_time_seconds=prep_time_seconds,
-                                                steps_json=instructions,
-                                                is_vegetarian=is_vegetarian,
-                                                price=price,
-                                                servings=servings)
+                                recipe = Recipe(
+                                    name=recipe_name,
+                                    image_url=recipe_image_url,
+                                    ingredients_json=ingredients,
+                                    recipe_json=json.dumps(a),
+                                    detailed_json=json.dumps(specific_res),
+                                    prep_time_seconds=prep_time_seconds,
+                                    steps_json=instructions,
+                                    is_vegetarian=is_vegetarian,
+                                    is_lactose_intolerant=is_lac_intolerant,
+                                    is_breakfast=is_breakfast,
+                                    price=price,
+                                    servings=servings,
+                                )
                                 recipe.save()
                                 show_success=True
                             else:

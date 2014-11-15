@@ -1,7 +1,5 @@
 import datetime
 from django.db import models
-from djorm_pgarray.fields import ArrayField
-from djorm_expressions.models import ExpressionManager
 
 class User(models.Model):
     # Tablenames don't actually do anything for migrate. Just FYI
@@ -34,7 +32,8 @@ class Recipe(models.Model):
     servings = models.IntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=5.0)
     is_vegetarian = models.BooleanField(default=True)
-    objects = ExpressionManager()
+    is_lactose_intolerant = models.BooleanField(default=True)
+    is_breakfast = models.BooleanField(default=True)
 
 class Ingredient(models.Model):
     __tablename__ = 'main_ingredient'
