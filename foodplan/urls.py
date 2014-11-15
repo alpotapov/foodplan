@@ -16,4 +16,6 @@ urlpatterns = patterns('',
     url(r'^about', 'main.views.about'),
     url(r'^reroll', 'main.views.reroll'),
     url(r'^export', 'main.views.export'),
+    url(r'^', include('user_profiles.urls')),
+    url(r'^', include('menu_generator.urls')),
 )
