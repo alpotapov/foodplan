@@ -1,0 +1,82 @@
+{% extends "base_layout.html" %}
+{% load staticfiles %}
+
+{% block custom_css %}
+<style>
+body {
+    background-color: transparent;
+    background-image: url('{% static "img/background.jpg" %}');
+}
+header {
+    background-image: url('{% static "img/shade.png" %}');
+    background-size: auto;
+    background-position: bottom;
+}
+.content {
+    background-image: url('{% static "img/shade.png" %}');
+}
+.content .container {
+    max-width: 800px;
+    color: white;
+}
+.content form {
+    color: #444444;
+}
+h1, h2, h3, h4, h5, h6, p {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+form {
+    text-align: center;
+}
+.row {
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div class="container">
+    <h1>Pantry selects personalized recipes for you and delivers the ingredients to your door.</h1>
+    <h3>We use your budget, mixed food groups, and international nutrition guidelines to provide your personalized meal plan.</h3>
+    <h3>With your meal plan you'll discover great healthy food, get all the nutrients you need, and only spend time cooking (rather than researching recipes and shopping). </h3>
+
+    <form method="post" action="dashboard" class="info">
+
+            <div class="row">
+                <label>
+                    <input type="text" class="form-control input" placeholder="Your Name" name="name">
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    <input type="text" class="form-control input" placeholder="# of mouths to feed" name="age">
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    <input type="text" class="form-control input" placeholder="Monthly Budget ($)" name="budget">
+                </label>
+            </div>
+
+            <div class="row">
+                <label class="btn btn-default btn-prefs" data-toggle="checkbox">
+                    <input type="checkbox" name="vegetarian" value="vegetarian">
+                    Vegetarian
+                </label>
+                <label class="btn btn-default btn-prefs" data-toggle="checkbox">
+                    <input type="checkbox" name="gluten" value="gluten-free">
+                    Gluten-free
+                </label>
+            </div>
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-lg btn-submit">Start generating meals</button>
+        </div>
+
+        {% csrf_token %}
+    </form>
+
+
+</div>
+{% endblock %}

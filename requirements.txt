@@ -1,0 +1,14 @@
+Django==1.7
+psycopg2==2.5.4
+wsgiref==0.1.2
+django-extensions==1.4.0
+djorm-ext-core==0.7
+djorm-ext-expressions==0.6
+djorm-ext-pgarray==0.10
+dj-database-url==0.2.1
+gunicorn==19.1.1
+requests==2.4.3
+enum34==1.0
+dj-static==0.0.6
+static==0.4
+evernote==1.25.0

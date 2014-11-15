@@ -1,0 +1,37 @@
+{% extends "base_layout.html" %}
+{% load staticfiles %}
+{% block custom_css %}
+<style>
+.meal-card-factsheet {
+    display: block;
+    height: 100%;
+}
+form {
+    margin-bottom: 20px;
+}
+
+</style>
+{% endblock %}
+{% block page_content %}
+    <h1>Edit your ingredients</h1>
+    <h4>Shows ingredients currently in the user's pantry.</h4>
+    <h2>Add</h2>
+    <form action="add_ingredient">
+        <input type="hidden" name="ingredient-id" class="ingredient-id">
+        <input type="text" class="form-control" placeholder="Ingredient Name" name="search">
+    </form>
+    <div class="meal-card-factsheet">
+        <table class="table table-hover">
+            <tbody>
+                {% for ingredient in ingredients %}
+                    <tr class="{{ ingredient.name }}">
+                        <td>
+                            <span class="description">{{ ingredient.description }} - {{ ingredient.carbohydrt_g }}g Carbs, {{ ingredient.protein_g }}g Protein, ...</span>
+                            <button style="float: right;" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
