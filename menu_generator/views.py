@@ -23,9 +23,9 @@ class JSONResponse(HttpResponse):
 def generate(request, user_id):
     #returns menu, format: {"day_name": {"meal_name": {pk, name, image_url, prep_time_seconds, price, is_vegetarian, is_lactose_intolerant}}}
 
-    #user = User.objects.filter(pk=user_id)[0]
-    #generator = MenuGenerator(lactose_intolerance_allowed=(not user.lactose_intolerance), vegetarian=user.vegetarian)
-    generator = MenuGenerator(lactose_intolerance_allowed=True, vegetarian=False)
+    user = User.objects.filter(pk=user_id)[0]
+    generator = MenuGenerator(lactose_intolerance_allowed=(not user.lactose_intolerance), vegetarian=user.vegetarian)
+    #generator = MenuGenerator(lactose_intolerance_allowed=True, vegetarian=False)
     week_menu = generator.generate_week_menu()
     return JSONResponse(week_menu)
 
@@ -33,7 +33,8 @@ def generate(request, user_id):
 def refresh_meal(request, user_id, day_name, meal_name):
     # returns single meal, format: {"day_name": {"meal_name": ...}}
 
-    generator = MenuGenerator(lactose_intolerance_allowed=True, vegetarian=False)
+    user = User.objects.filter(pk=user_id)[0]
+    generator = MenuGenerator(lactose_intolerance_allowed=(not user.lactose_intolerance), vegetarian=user.vegetarian)
     if meal_name == "breakfast":
         breakfast = True
     else:
