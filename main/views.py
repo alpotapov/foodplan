@@ -93,14 +93,14 @@ def improve(request):
                         if request.POST.get('meal_is_breakfast', False):
                             is_breakfast = True
                         else:
-                            is_breakfast = false
+                            is_breakfast = False
                         price = int(request.POST.get('price', 8) or 8)
 
                         prep_time_seconds = a["totalTimeInSeconds"]
                         instructions = ["If you're cooking chicken for this, trim visible fat from 4 chicken breasts, then cut the chicken lengthwise into thirds.  Put the can of chicken stock, 2 cans of water, and the Italian Herb Blend into a small sauce pan and bring to a boil.  When it boils add chicken breasts, turn heat to medium low, and  let simmer 15-20 minutes, or until the chicken is cooked through.  Drain the chicken into a colander placed in the sink and let it cool.  (I saved the liquid in the freezer to add when I'm making chicken stock.)'In a large skillet, melt butter over medium; reserve 1 tablespoon in a small bowl. To skillet, add apples, 1/2 cup sugar, and cinnamon. Increase heat to medium-high; cook, tossing occasionally, until apples are tender and liquid has evaporated, about 15 minutes. Spread filling on a second rimmed baking sheet; let cool completely.",
                                         "While the chicken cools, slice the basil leaves (and wash if needed), chop green onions, and measure the freshly-grated Parmesan. When it's cool, dice chicken into pieces about 3/4 inch square and place into medium-sized bowl.",
                                         "Combine mayo and buttermilk, whisking until it's smooth.  Then stir in green onion, Parmesan, and basil. Add dressing to the chicken in the bowl and gently mix until chicken is well coated with dressing. Season with salt and fresh ground black pepper. This can be served immediately or chilled slightly before serving.  This will keep in the fridge for about a day, but it's best freshly made."]
-                        if not (ingredients and recipe_id and recipe_name and recipe_image_url):
+                        if not (recipe_id and recipe_name and recipe_image_url):
                             print "Not enough information, try a different recipe\n"
                         else:
                             if not Recipe.objects.filter(name=recipe_name):
@@ -121,7 +121,6 @@ def improve(request):
                                 recipe.save()
                                 show_success=True
                             else:
-                                print "ignoring duplicate\n"
                                 show_already = True
                     else:
                         print "err\n"

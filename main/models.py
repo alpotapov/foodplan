@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+import json
 
 class User(models.Model):
     # Tablenames don't actually do anything for migrate. Just FYI
@@ -34,6 +35,28 @@ class Recipe(models.Model):
     is_vegetarian = models.BooleanField(default=True)
     is_lactose_intolerant = models.BooleanField(default=True)
     is_breakfast = models.BooleanField(default=True)
+
+    def _nutrition_facts(self, key):
+        nutrition_facts = json.loads(self.detailed_json)['nutritionEstimates']
+        for fact in nutrition_facts:
+            if fact['attribute'] == key:
+                return fact['value']
+        return None
+
+    def _calories(self):
+        """ Recipe Property: calories """
+        return self._nutrition_facts('ENERC_KCAL')
+    calories = property(_calories)
+
+    def _glucose(self):
+        """ Recipe Property: glucose """
+        return self._nutrition_facts('GLUS')
+    glucose = property(_glucose)
+
+    def _sugar(self):
+        """ Recipe Property: sugar """
+        return self._nutrition_facts('SUGAR')
+    sugar = property(_sugar)
 
 class Ingredient(models.Model):
     __tablename__ = 'main_ingredient'
