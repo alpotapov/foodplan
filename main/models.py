@@ -35,6 +35,9 @@ class Recipe(models.Model):
     is_lactose_intolerant = models.BooleanField(default=True)
     is_breakfast = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.name
+
 class Ingredient(models.Model):
     __tablename__ = 'main_ingredient'
 
