@@ -58,6 +58,9 @@ class Recipe(models.Model):
         return self._nutrition_facts('SUGAR')
     sugar = property(_sugar)
 
+    def __str__(self):
+        return self.name
+
 class Ingredient(models.Model):
     __tablename__ = 'main_ingredient'
 

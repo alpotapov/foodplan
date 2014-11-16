@@ -39,6 +39,8 @@ INSTALLED_APPS = (
     'django_extensions',
     'foodplan',
     'main',
+    'user_profiles',
+    'menu_generator',
     'gunicorn',
 )
 
